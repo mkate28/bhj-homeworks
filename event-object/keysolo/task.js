@@ -6,25 +6,43 @@ class Game {
     this.lossElement = container.querySelector('.status__loss');
 
     this.reset();
-
     this.registerEvents();
   }
 
   reset() {
     this.setNewWord();
+    this.setTimer();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода слова вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keyup', event => {
+      if (event.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()) {
+        this.success();
+      } else {
+        this.fail();
+      }
+    })
+  }
+
+  setTimer() {
+    const timer = document.querySelector('.status__time');
+    let time = this.wordElement.children.length;
+    function timeValue(time) {
+      timer.innerHTML = time < 10 ? `00:0${time}` : `00:${time}`;
+    }
+    timeValue(time);
+    const timerId = setInterval(() => {
+      let value = time;
+      if (value > 0) {
+        time = value - 1;
+        timeValue(time);
+      } else {
+        clearInterval(timerId);
+        this.reset();
+      }
+    }, 1000);
   }
 
   success() {
