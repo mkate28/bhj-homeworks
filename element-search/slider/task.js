@@ -1,8 +1,7 @@
-const slides = document.querySelectorAll('.slider__item');
+const slides = Array.from(document.querySelectorAll('.slider__item'));
 const dots = document.querySelectorAll('.slider__dot');
 const arrowPrev = document.querySelector('.slider__arrow_prev');
 const arrowNext = document.querySelector('.slider__arrow_next');
-let counter = 0;
 
 arrowPrev.addEventListener('click', showPrevSlide);
 arrowNext.addEventListener('click', showNextSlide);
@@ -12,15 +11,17 @@ slides.forEach((slide, index) => {
 })
 
 function showPrevSlide() {
-	currentSlide(counter);
-	counter = counter === 0 ? slides.length - 1 : counter - 1;
-	changeSlide();
+	let current = slides.indexOf(document.querySelector('.slider__item_active'));
+	currentSlide(current);
+	let active = current === 0 ? slides.length - 1 : current - 1;
+	changeSlide(active);
 }
 
 function showNextSlide() {
-	currentSlide(counter);
-	counter = (counter + 1 === slides.length) ? 0 : counter + 1;
-	changeSlide();
+	let current = slides.indexOf(document.querySelector('.slider__item_active'));
+	currentSlide(current);
+	let active = (current + 1 === slides.length) ? 0 : current + 1;
+	changeSlide(active);
 }
 
 function showSlide(index) {
@@ -33,9 +34,9 @@ function currentSlide(index) {
 	slide.classList.remove('slider__item_active');
 }
 
-function changeSlide() {
-	showSlide(counter);
-	activeSlide(counter);
+function changeSlide(index) {
+	showSlide(index);
+	activeSlide(index);
 }
 
 function activeSlide(index) {
@@ -48,6 +49,5 @@ dots.forEach((dot, index) => {
 		slides.forEach(elem => elem.classList.remove('slider__item_active'));
 		showSlide(index);
 		activeSlide(index);
-		counter = index;
 	}
 })
