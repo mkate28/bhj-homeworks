@@ -11,7 +11,6 @@ class Game {
 
   reset() {
     this.setNewWord();
-    this.setTimer();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
   }
@@ -26,20 +25,22 @@ class Game {
     })
   }
 
+  timerId = null;
   setTimer() {
     const timer = document.querySelector('.status__time');
     let time = this.wordElement.children.length;
     function timeValue(time) {
       timer.innerHTML = time < 10 ? `00:0${time}` : `00:${time}`;
     }
+    clearInterval(this.timerId);
     timeValue(time);
-    const timerId = setInterval(() => {
+    this.timerId = setInterval(() => {
       let value = time;
       if (value > 0) {
         time = value - 1;
         timeValue(time);
       } else {
-        clearInterval(timerId);
+        clearInterval(this.timerId);
         this.reset();
       }
     }, 1000);
@@ -72,8 +73,8 @@ class Game {
 
   setNewWord() {
     const word = this.getWord();
-
     this.renderWord(word);
+    this.setTimer();
   }
 
   getWord() {
