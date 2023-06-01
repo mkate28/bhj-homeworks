@@ -5,15 +5,9 @@ interests.forEach(interest => {
   const groupInterest = interest.previousElementSibling.firstElementChild;
   const groupCheckboxes = interest.querySelectorAll('.interest__check');
   groupInterest.addEventListener('change', function() {
-    if (this.checked) {
-      groupCheckboxes.forEach(el => {
-        el.checked = true;
-      })
-    } else {
-      groupCheckboxes.forEach(el => {
-        el.checked = false;
-      })
-    }
+    groupCheckboxes.forEach(el => {
+       el.checked = this.checked;
+    });
   })
 })
 
