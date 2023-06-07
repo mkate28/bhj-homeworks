@@ -5,6 +5,10 @@ const welcome = document.getElementById('welcome');
 const id = document.getElementById('user_id');
 const signForm = document.getElementById('signin');
 
+if (localStorage.getItem('id')) {
+   signIn(localStorage.getItem('id'));
+}
+
 btnIn.addEventListener('click', function(e) {
    e.preventDefault();
    const data = new FormData(form);
@@ -12,17 +16,13 @@ btnIn.addEventListener('click', function(e) {
    xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/auth');
    xhr.responseType = 'json';
    xhr.send(data);
+
    xhr.onload = () => {
       const response = xhr.response;
-      const userId = response['user_id'];
-      console.log(userId);
-      localStorage.setItem('id', userId);
       if (response['success']) {
-         signForm.classList.remove('signin_active');
-         welcome.classList.add('welcome_active');
-         if (localStorage.getItem('id')) {
-            id.textContent = userId;
-         }
+         const userId = response['user_id'];
+         localStorage.setItem('id', userId);
+         signIn(userId);
       } else {
          alert('Неверный логин/пароль');
       }
@@ -30,7 +30,14 @@ btnIn.addEventListener('click', function(e) {
    }
 })
 
+function signIn(user) {
+   signForm.classList.remove('signin_active');
+   welcome.classList.add('welcome_active');
+   id.textContent = user;
+}
+
 btnOut.addEventListener('click', () => {
+   localStorage.clear();
    welcome.classList.remove('welcome_active');
    signForm.classList.add('signin_active');
-}) 
+})

@@ -1,13 +1,10 @@
 const textarea = document.getElementById('editor');
 const reset = document.getElementById('reset');
 
-if (localStorage.getItem('text')) {
-   textarea.value = localStorage.getItem('text');
-}
-
-textarea.onchange = () => {
+textarea.value = localStorage.getItem('text');
+textarea.addEventListener('input', () => {
    saveText(textarea.value);
-}
+})
 
 reset.onclick = () => {
    textarea.value = '';
